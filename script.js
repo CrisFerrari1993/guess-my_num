@@ -3,8 +3,22 @@
 let secretNum = Math.floor(Math.random() * 20) + 1;
 let score = Number(document.querySelector('.score').textContent);
 let highscore = Number(document.querySelector('.highscore').textContent);
-let message = document.querySelector('.message');
-
+// function that return a message
+const showMessage = function (message) {
+  return (document.querySelector('.message').textContent = message);
+};
+// function that return a score value
+const changeScore = function (score) {
+  return (document.querySelector('.score').textContent = score);
+};
+// function that return NewHighScore
+const setHighScore = function (highscore) {
+  return (document.querySelector('.highscore').textContent = highscore);
+};
+// function that change the body background color
+const changeBodyBackgroundColor = function (color) {
+  return (document.querySelector('body').style.backgroundColor = color);
+};
 // at the click run this function
 document.querySelector('.check').addEventListener('click', function () {
   // variable that represent user choice.
@@ -12,52 +26,41 @@ document.querySelector('.check').addEventListener('click', function () {
 
   // if user guess fill 0 or nothing into num input field
   if (!userChoice) {
-    message.textContent = '⛔ No number!';
+    showMessage('⛔ No number!');
     // if user hit right num
   } else if (userChoice === secretNum) {
     // if score > highscore, sign new highscore, else highscore still the same
     if (highscore < score) {
       highscore = score;
     }
-    document.querySelector('.highscore').textContent = highscore;
-    message.textContent = 'You win!🎉';
-    document.querySelector('body').style.backgroundColor = '#60b347';
+    // document.querySelector('.highscore').textContent = highscore;
+    setHighScore(highscore);
+    showMessage('You win!🎉');
+    changeBodyBackgroundColor('#60b347');
     document.querySelector('.number').style.width = '30rem';
     document.querySelector('.number').textContent = secretNum;
     // if the userChoice is less than secretNum do this;
-  } else if (userChoice > secretNum) {
+  } else if (userChoice !== secretNum) {
     //if the score is > 1 stll count...
     if (score > 1) {
-      message.textContent = ' 📈 Too high';
+      showMessage(userChoice > secretNum ? '📈 Too high' : '📉 Too low');
       score--;
-      document.querySelector('.score').textContent = score;
+      changeScore(score);
       // if the score reach the value of one and you can't guess in the next try... game over
     } else {
       score = 0;
-      document.querySelector('.score').textContent = score;
-      message.textContent = 'Game over!';
-    }
-    //if the score is < 1 stll count...
-  } else if (userChoice < secretNum) {
-    if (score > 1) {
-      message.textContent = ' 📉 Too low';
-      score--;
-      document.querySelector('.score').textContent = score;
-      // if the score reach the value of one and you can't guess in the next try... game over
-    } else {
-      score = 0;
-      document.querySelector('.score').textContent = score;
-      message.textContent = 'Game over!';
+      changeScore(score);
+      showMessage('Game over...');
     }
   }
 });
 // if user click again button, repeat the game and set default values, even the css
 document.querySelector('.again').addEventListener('click', function () {
   document.querySelector('.number').textContent = '?';
-  document.querySelector('body').style.backgroundColor = '#222';
-  document.querySelector('.guess').value = 0;
+  changeBodyBackgroundColor('#222');
+  document.querySelector('.guess').value = '';
   score = 20;
-  document.querySelector('.score').textContent = score;
+  changeScore(score);
   secretNum = Math.floor(Math.random() * 20) + 1;
-  message.textContent = 'Start guessing...';
+  showMessage('Start guessing...');
 });
