@@ -1,8 +1,9 @@
 'use strict';
-// variables declaration (for guess num, score hightscore, message);
+// variables declaration
 let secretNum = Math.floor(Math.random() * 20) + 1;
 let score = Number(document.querySelector('.score').textContent);
 let highscore = Number(document.querySelector('.highscore').textContent);
+let guessNumber = document.querySelector('.number');
 // function that return a message
 const showMessage = function (message) {
   return (document.querySelector('.message').textContent = message);
@@ -25,8 +26,9 @@ document.querySelector('.check').addEventListener('click', function () {
   let userChoice = Number(document.querySelector('.guess').value);
 
   // if user guess fill 0 or nothing into num input field
-  if (!userChoice) {
-    showMessage('⛔ No number!');
+  if (!userChoice || userChoice < 0 || userChoice > 20) {
+    if (!userChoice) showMessage('⛔ No number!');
+    else showMessage('Number must be between 0 and 20! 😊');
     // if user hit right num
   } else if (userChoice === secretNum) {
     // if score > highscore, sign new highscore, else highscore still the same
@@ -37,8 +39,8 @@ document.querySelector('.check').addEventListener('click', function () {
     setHighScore(highscore);
     showMessage('You win!🎉');
     changeBodyBackgroundColor('#60b347');
-    document.querySelector('.number').style.width = '30rem';
-    document.querySelector('.number').textContent = secretNum;
+    guessNumber.style.width = '30rem';
+    guessNumber.textContent = secretNum;
     // if the userChoice is less than secretNum do this;
   } else if (userChoice !== secretNum) {
     //if the score is > 1 stll count...
@@ -56,7 +58,7 @@ document.querySelector('.check').addEventListener('click', function () {
 });
 // if user click again button, repeat the game and set default values, even the css
 document.querySelector('.again').addEventListener('click', function () {
-  document.querySelector('.number').textContent = '?';
+  guessNumber.textContent = '?';
   changeBodyBackgroundColor('#222');
   document.querySelector('.guess').value = '';
   score = 20;
